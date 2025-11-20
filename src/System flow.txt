@@ -1,0 +1,32 @@
+PHASE1
+
+1. Create student class
+
+2. make home menu showing the options for the system
+(Student -> more options -> back, View Students, Add Student, Remove Student)
+(Future stuff: Student orgs, Student billings,)
+
+
+3. create method for each menu
+
+4. View Students:
+
+Number of Students: XX
+Enrolled Students: XX
+
+
+ Student ID                Name                Age    Birthdate    Course     Section       YEAR        Status
+    XXXX        xxxxxxxxxxxxxxxxxxxxxxxxxxx    xx     XX/XX/XXXX   XXXX       XXX-XXX     XXX XXXX      Enrolled/Unenrolled
+
+5. Add Students
+ask for id, name, age, birthdate, course, section, status
+
+6. Remove students
+ask for student id, and reason
+
+Total removed students: XX 
+
+Removed Students:
+
+ Student ID                Name                Age    Birthdate    Course     Section       YEAR        Reason
+    XXXX        xxxxxxxxxxxxxxxxxxxxxxxxxxx    xx     XX/XX/XXXX   XXXX       XXX-XXX     XXX XXXX     XXXXXXXXX
