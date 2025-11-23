@@ -1,28 +1,31 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 // initialize Student class
-public class Student {
+public class StudentRecord {
+
+    public static final DateTimeFormatter BIRTHDATE_FORMAT = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     // set all variable with private to efficiently use setter and getters
     private String studentID;
     private String studentName;
-    private int age;
-    private String birthDate;
+    private String gender;
+    private String age;
+    private LocalDate birthDate;
     private String course;
     private String section;
     private String gradeYear;
-    private boolean isEnrolled;
 
     // set-up of constructor
-    public Student(String studentID, String studentName, int age, String birthDate, String course, String section, String gradeYear) {
-
+    public StudentRecord(String studentID, String studentName, String gender, String age, LocalDate birthDate, String course, String section, String gradeYear) {
         this.studentID = studentID;
         this.studentName = studentName;
+        this.gender = gender;
         this.age = age;
         this.birthDate = birthDate;
         this.course = course;
         this.section = section;
         this.gradeYear = gradeYear;
-        this.isEnrolled = false;
     }
 
     public String getStudentID(){ // student id getter
@@ -39,17 +42,24 @@ public class Student {
         this.studentName = studentName;
     }
 
-    public int getAge(){ // student age getter
+    public String getStudentGender(){
+        return gender;
+    }
+    public void setStudentGender(String gender){
+        this.gender = gender;
+    }
+
+    public String getStudentAge(){ // student age getter
         return age;
     }
-    public void setAge(int age){ // student age setter
+    public void setStudentAge(String age){ // student age setter
         this.age = age;
     }
 
-    public String getBirthDate(){ // student birthdate getter
+    public LocalDate getBirthDate(){ // student birthdate getter
         return birthDate;
     }
-    public void setBirthDate(String birthDate){ // student birhtdate setter
+    public void setBirthDate(LocalDate birthDate){ // student birthdate setter
         this.birthDate = birthDate;
     }
 
@@ -74,10 +84,7 @@ public class Student {
         this.gradeYear = gradeYear;
     }
 
-    public boolean isEnrolled(){ // student status initialization
-        return isEnrolled;
-    }
-    public void setEnrolled(boolean enrolled){ // student status setter
-        isEnrolled = enrolled;
+    public String toCSVLine(){
+        return String.join(",", getStudentID(), getStudentName(), getStudentGender(), getStudentAge(), getBirthDate().format(BIRTHDATE_FORMAT), getCourse(), getSection(), getGradeYear());
     }
 }
