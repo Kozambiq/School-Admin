@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -7,8 +11,22 @@ import java.util.Scanner;
 
 public class main {
 
+
+
+
+
+
+
+    ///SAVE INSIDE SRC FILEE THE CSV FILE
+
+
+
+
+
+
+    private static final String CSV_FILE = "./students_record.csv";
     public static final DateTimeFormatter BIRTHDATE_FORMAT = DateTimeFormatter.ofPattern("MM/dd/yyyy"); // static format for time
-    static ArrayList<Student> studentRecord = new ArrayList<>(); // set static ArrayList of Student object using studentRecord variable
+    static ArrayList<StudentRecord> records = new ArrayList<>(); // set static ArrayList of Student object using studentRecord variable
     static Scanner scanner = new Scanner(System.in); // set static scanner
 
     public static void main(String[] args){
@@ -20,7 +38,7 @@ public class main {
                 printMenu(); // calls the printMenu method
                 System.out.print("Choose an option: ");
                 choice = scanner.nextInt(); // reads user input
-                scanner.nextLine();
+                scanner.nextLine(); // debuffer line
 
                 // validates user input
                 switch (choice) {
@@ -31,7 +49,7 @@ public class main {
                     default -> System.out.println("Invalid choice\n");
                 }
             }
-            catch (InputMismatchException e){
+            catch (InputMismatchException | IOException e){
                 System.out.println("Invalid Input\n");
                 scanner.nextLine();
                 choice -= 1;
@@ -54,24 +72,27 @@ public class main {
     static void viewAllStudents(){
 
     }
-    //debugging stage
+
     // method for adding new student
-    static void addNewStudent(){
-        //String studentId = askStudentId(); // calls askStudentId method
-        //String studentName = askStudentName(); // calls askStudentName method
+    static void addNewStudent() throws IOException {
+        String studentId = askStudentId(); // calls askStudentId method
+        for(StudentRecord record : records){
+            if(studentId.equals(record.getStudentID())){
+                System.out.println("Student ID already exists\n");
+                return;
+            }
+        }
+        String studentName = askStudentName(); // calls askStudentName method
         String studentGender = askStudentGender();
-        //int studentAge = askStudentAge(); // calls askStudentAge method
-        //LocalDate studentBD = askStudentBirthDate();
-        //String studentCourse = askStudentCourse();
-        //String studentSection = askStudentSection();
-        // debug
-        //System.out.println(studentId);
-        //System.out.println(studentName);
-        //System.out.println(studentAge);
-        //System.out.println(studentBD);
-        //System.out.println(studentCourse);
-        //System.out.println(studentSection);
-        System.out.println(studentGender);
+        String studentAge = askStudentAge(); // calls askStudentAge method
+        LocalDate studentBD = askStudentBirthDate();
+        String studentCourse = askStudentCourse();
+        String studentSection = askStudentSection();
+        String studentYear = askStudentYear();
+
+        StudentRecord record = new StudentRecord(studentId, studentName, studentGender, studentAge, studentBD, studentCourse, studentSection, studentYear);
+        records.add(record);
+        saveCSVFile();
     }
 
     static public String askStudentId(){
@@ -117,7 +138,7 @@ public class main {
         }
     }
 
-    static public int askStudentAge(){
+    static public String askStudentAge(){
         while(true){
             System.out.print("Enter Student Age: ");
             String studentAge = scanner.nextLine().trim(); // reads user input
@@ -125,7 +146,7 @@ public class main {
             else if(!studentAge.matches("[0-9]+")) System.out.println("Student Age can only contain numbers\n"); // check if input only contains numbers
             else if(studentAge.length() == 1) System.out.println("Student Age cannot be lower than 2 digits\n"); // checks if age is only 1 digit
             else if(studentAge.length() >= 3) System.out.println("Student Age cannot exceed 3 digits\n"); // check if age exceeds more than 2 digit
-            else return Integer.parseInt(studentAge); // return the String data type and turns it into an int
+            else return studentAge; // return the String data type and turns it into an int
         }
     }
 
@@ -172,6 +193,17 @@ public class main {
         }
     }
 
+    static public String askStudentYear(){
+        while(true){
+            System.out.print("Enter Student Year(1st, 2nd, ....): ");
+            String studentYear = scanner.nextLine().trim().toUpperCase();
+            if(studentYear.isEmpty()) System.out.println("Student Year cannot be empty\n");
+            else if(!studentYear.matches("^(1ST|2ND|3RD|4TH|5TH|6TH)$")) System.out.println("Invalid Year\n");
+            else return studentYear;
+        }
+    }
+
+
     // method for removing student
     static void removeStudent(){
 
@@ -181,4 +213,17 @@ public class main {
     static void viewStudentDetails(){
 
     }
+
+    static void saveCSVFile() throws IOException {
+        try(PrintWriter pw = new PrintWriter(new FileWriter(CSV_FILE, true))){
+            for(StudentRecord record : records){
+                pw.println(record.toCSVLine());
+            }
+        }
+        catch(IOException e){
+            System.out.println("Error writing to CSV file" + e.getMessage());
+        }
+        System.out.println("Saving CSV to: " + new File(CSV_FILE).getAbsolutePath());
+    }
+
 }
