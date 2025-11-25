@@ -56,35 +56,51 @@ public class StudentRecord {
         this.age = age;
     }
 
-    public LocalDate getBirthDate(){ // student birthdate getter
+    public LocalDate getStudentBirthDate(){ // student birthdate getter
         return birthDate;
     }
-    public void setBirthDate(LocalDate birthDate){ // student birthdate setter
+    public void setStudentBirthDate(LocalDate birthDate){ // student birthdate setter
         this.birthDate = birthDate;
     }
 
-    public String getCourse(){ // student course getter
+    public String getStudentCourse(){ // student course getter
         return course;
     }
-    public void setCourse(String course){ // student course setter
+    public void setStudentCourse(String course){ // student course setter
         this.course = course;
     }
 
-    public String getSection(){ // student section getter
+    public String getStudentSection(){ // student section getter
         return section;
     }
-    public void setSection(String section){ // student section setter
+    public void setStudentSection(String section){ // student section setter
         this.section = section;
     }
 
-    public String getGradeYear(){ // student grade year getter
+    public String getStudentGradeYear(){ // student grade year getter
         return gradeYear;
     }
-    public void setGradeYear(String gradeYear){ // student grade year setter
+    public void setStudentGradeYear(String gradeYear){ // student grade year setter
         this.gradeYear = gradeYear;
     }
 
     public String toCSVLine(){
-        return String.join(",", getStudentID(), getStudentName(), getStudentGender(), getStudentAge(), getBirthDate().format(BIRTHDATE_FORMAT), getCourse(), getSection(), getGradeYear());
+        return String.join("|", getStudentID(), getStudentName(), getStudentGender(), getStudentAge(), getStudentBirthDate().format(BIRTHDATE_FORMAT), getStudentCourse(), getStudentSection(), getStudentGradeYear());
+    }
+
+    /*
+     * Splits the information with "|"
+     */
+    public static StudentRecord fromCSVLine(String csvLine){
+        String[] parts = csvLine.split("\\|");
+        String studentID = parts[0];
+        String studentName = parts[1];
+        String gender = parts[2];
+        String age = parts[3];
+        LocalDate birthDate = LocalDate.parse(parts[4], BIRTHDATE_FORMAT);
+        String course = parts[5];
+        String section = parts[6];
+        String gradeYear = parts[7];
+        return new StudentRecord(studentID, studentName, gender, age, birthDate, course, section, gradeYear);
     }
 }
